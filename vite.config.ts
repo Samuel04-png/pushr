@@ -4,8 +4,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    // Only use base path for production builds (GitHub Pages)
+    const base = mode === 'production' ? '/pushr/' : '/';
     return {
-      base: '/pushr/',
+      base,
       server: {
         port: 3000,
         host: '0.0.0.0',
