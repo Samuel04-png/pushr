@@ -1,0 +1,7 @@
+{
+  "name": "Pushr",
+  "description": "A smart delivery marketplace connecting customers with movers, riders, and pushers. Features AI-powered matching and 'Float' payment systems for couriers.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
