@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import { copyFileSync } from 'fs';
+import { copyFileSync, existsSync } from 'fs';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
@@ -19,10 +19,12 @@ export default defineConfig(({ mode }) => {
           name: 'copy-nojekyll',
           closeBundle() {
             // Copy .nojekyll to dist folder after build
-            try {
-              copyFileSync('.nojekyll', 'dist/.nojekyll');
-            } catch (e) {
-              // File might not exist, that's okay
+            if (existsSync('.nojekyll')) {
+              try {
+                copyFileSync('.nojekyll', 'dist/.nojekyll');
+              } catch (e) {
+                console.warn('Could not copy .nojekyll:', e);
+              }
             }
           }
         }
