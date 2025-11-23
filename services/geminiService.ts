@@ -1,9 +1,11 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Get API key from environment or use empty string (will use fallback)
+const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY || '') as string;
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export const analyzeDeliveryRequest = async (description: string, distanceKm: number) => {
-  if (!process.env.API_KEY) {
+  if (!apiKey || !ai) {
     // Fallback mock response if no key
     return {
       recommendedCategory: 'bike',
@@ -65,7 +67,7 @@ export const analyzeDeliveryRequest = async (description: string, distanceKm: nu
 };
 
 export const getPusherOptimizationTip = async (pusherStats: any) => {
-   if (!process.env.API_KEY) return "Try working on weekends for 20% more tips!";
+   if (!apiKey || !ai) return "Try working on weekends for 20% more tips!";
 
    const prompt = `
      Given these stats for a delivery rider: ${JSON.stringify(pusherStats)}.
