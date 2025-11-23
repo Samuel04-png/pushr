@@ -2,7 +2,16 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 // Get API key from environment or use empty string (will use fallback)
 const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY || '') as string;
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+// Only initialize AI client if we have an API key
+let ai: GoogleGenAI | null = null;
+try {
+  if (apiKey && apiKey.trim() !== '') {
+    ai = new GoogleGenAI({ apiKey });
+  }
+} catch (e) {
+  console.warn('Could not initialize Gemini AI client:', e);
+  ai = null;
+}
 
 export const analyzeDeliveryRequest = async (description: string, distanceKm: number) => {
   if (!apiKey || !ai) {
